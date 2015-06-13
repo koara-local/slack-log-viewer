@@ -24,4 +24,4 @@ _testmain.go
 *.prof
 
 node_modules/
-app/bower_components/
+deploy/bower_components/
