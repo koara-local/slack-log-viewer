@@ -42,7 +42,14 @@ channelMassages = new Vue({
             $.getJSON(path, function(data) {
                 var len = data.length;
                 for(var i = 0; i < len; i++) {
-                    channelMassages.massages.push(data[i]);
+                    var message = data[i];
+
+                    // if no icon image, add dummy icon
+                    if (message.icons === undefined) {
+                        message.icons = { image_48: 'assets/icon/dummy.png' };
+                    }
+
+                    channelMassages.massages.push(message);
                 }
             });
         }
