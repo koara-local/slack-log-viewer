@@ -3,9 +3,56 @@ html
     head
         meta(charset='UTF-8')
         title Slack Log Viewer
+        // jquery
         script(src='/bower_components/jquery/dist/jquery.min.js')
+        // bootstrap
         script(src='/bower_components/bootstrap/dist/js/bootstrap.min.js')
         link(rel='stylesheet', href='/bower_components/bootstrap/dist/css/bootstrap.min.css')
+        // vue.js
+        script(src='/bower_components/vue/dist/vue.min.js')
+
     body
-        button(type="button" class="btn btn-default") Default
-        "hello world!!!"
+        nav.navbar.navbar-inverse.navbar-fixed-top
+            div.container-fluid
+                div.navbar-header
+                button.navbar-toggle.collapsed(
+                        type="button"
+                        data-toggle="collapse"
+                        data-target="#navbar"
+                        aria-expanded="false"
+                        aria-controls="navbar")
+                    span.sr-only Toggle navigation
+                    span.icon-bar
+                    span.icon-bar
+                    span.icon-bar
+                a(href="#").navbar-brand Slack Log Viewer
+                div#navbar.navbar-collapse.collapse
+                    ul.nav.navbar-nav.navbar-right
+                        li
+                            a(href="#") Dashboard
+                        li
+                            a(href="#") Settings
+                        li
+                            a(href="#") Profile
+                        li 
+                            a(href="#") Help
+                    form.navbar-form.navbar-right
+                        input(type="text" class="form-control" placeholder="Search...")
+
+        div.container-fluid
+            div.raw
+                div#channelList.col-sm-3.col-md-2.sidebar
+                    ul.nav.nav-sidebar
+                        li(v-repeat="channels")
+                            a(v-on="click: onClick") \#{{ name }}
+
+
+                div#channelMassages.col-sm-9.col-sm-offset-3.col-md-10.col-md-offset-2.main
+                    h1.page-header Dashboard
+                    div
+                        ul
+                            li(v-repeat="massages")
+                                a {{ text }}
+
+    link(rel='stylesheet', href='/assets/css/viewer.css')
+    script(src='/assets/js/read-json.js')
