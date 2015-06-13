@@ -2,6 +2,7 @@ gulp    = require "gulp"
 coffee  = require "gulp-coffee"
 plumber = require "gulp-plumber"
 jade    = require "gulp-jade"
+uglify  = require "gulp-uglify"
 
 gulp.task 'compile-coffee', () ->
   gulp.src('app/source/coffee/*.coffee')
@@ -15,6 +16,13 @@ gulp.task 'compile-jade', () ->
     .pipe(jade({pretty:true}))
     .pipe(gulp.dest('app/'))
 
+gulp.task 'js', () ->
+  gulp.src('app/source/js/*.js')
+    .pipe(plumber())
+    .pipe(uglify())
+    .pipe(gulp.dest('app/assets/js'))
+
 gulp.task 'default', () ->
   gulp.watch(["app/source/coffee/*.coffee"], ["compile-coffee"])
   gulp.watch(["app/source/jade/*.jade"], ["compile-jade"])
+  gulp.watch(["app/source/js/*.js"], ["js"])
