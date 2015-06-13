@@ -1,0 +1,46 @@
+[
+    {
+        "id": "U0693LV1V",
+        "name": "koara-local",
+        "deleted": false,
+        "status": null,
+        "color": "9f69e7",
+        "real_name": "",
+        "tz": "Asia\/Tokyo",
+        "tz_label": "Japan Standard Time",
+        "tz_offset": 32400,
+        "profile": {
+            "real_name": "",
+            "real_name_normalized": "",
+            "email": "koara.local.jp@gmail.com",
+            "image_24": "https:\/\/secure.gravatar.com\/avatar\/bb824d869cf3b03f641d05cb78d9668a.jpg?s=24&d=https%3A%2F%2Fslack.global.ssl.fastly.net%2F3654%2Fimg%2Favatars%2Fava_0016-24.png",
+            "image_32": "https:\/\/secure.gravatar.com\/avatar\/bb824d869cf3b03f641d05cb78d9668a.jpg?s=32&d=https%3A%2F%2Fslack.global.ssl.fastly.net%2F3654%2Fimg%2Favatars%2Fava_0016-32.png",
+            "image_48": "https:\/\/secure.gravatar.com\/avatar\/bb824d869cf3b03f641d05cb78d9668a.jpg?s=48&d=https%3A%2F%2Fslack.global.ssl.fastly.net%2F3654%2Fimg%2Favatars%2Fava_0016-48.png",
+            "image_72": "https:\/\/secure.gravatar.com\/avatar\/bb824d869cf3b03f641d05cb78d9668a.jpg?s=72&d=https%3A%2F%2Fslack.global.ssl.fastly.net%2F3654%2Fimg%2Favatars%2Fava_0016-72.png",
+            "image_192": "https:\/\/secure.gravatar.com\/avatar\/bb824d869cf3b03f641d05cb78d9668a.jpg?s=192&d=https%3A%2F%2Fslack.global.ssl.fastly.net%2F3654%2Fimg%2Favatars%2Fava_0016.png"
+        },
+        "is_admin": true,
+        "is_owner": true,
+        "is_primary_owner": true,
+        "is_restricted": false,
+        "is_ultra_restricted": false,
+        "is_bot": false
+    },
+    {
+        "id": "U0693NXDK",
+        "name": "koheiarao",
+        "deleted": true,
+        "profile": {
+            "first_name": "Taro",
+            "last_name": "Tanaka",
+            "real_name": "Tanaka Taro",
+            "real_name_normalized": "Tanaka Taro",
+            "email": "koara.local.jp@gmail.com",
+            "image_24": "https:\/\/secure.gravatar.com\/avatar\/b06ac75244de45752f71cfce31c9a0d1.jpg?s=24&d=https%3A%2F%2Fslack.global.ssl.fastly.net%2F3654%2Fimg%2Favatars%2Fava_0025-24.png",
+            "image_32": "https:\/\/secure.gravatar.com\/avatar\/b06ac75244de45752f71cfce31c9a0d1.jpg?s=32&d=https%3A%2F%2Fslack.global.ssl.fastly.net%2F3654%2Fimg%2Favatars%2Fava_0025-32.png",
+            "image_48": "https:\/\/secure.gravatar.com\/avatar\/b06ac75244de45752f71cfce31c9a0d1.jpg?s=48&d=https%3A%2F%2Fslack.global.ssl.fastly.net%2F3654%2Fimg%2Favatars%2Fava_0025-48.png",
+            "image_72": "https:\/\/secure.gravatar.com\/avatar\/b06ac75244de45752f71cfce31c9a0d1.jpg?s=72&d=https%3A%2F%2Fslack.global.ssl.fastly.net%2F3654%2Fimg%2Favatars%2Fava_0025-72.png",
+            "image_192": "https:\/\/secure.gravatar.com\/avatar\/b06ac75244de45752f71cfce31c9a0d1.jpg?s=192&d=https%3A%2F%2Fslack.global.ssl.fastly.net%2F3654%2Fimg%2Favatars%2Fava_0025.png"
+        }
+    }
+]

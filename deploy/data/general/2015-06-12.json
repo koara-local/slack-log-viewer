@@ -1,0 +1,16 @@
+[
+    {
+        "user": "U0693LV1V",
+        "type": "message",
+        "subtype": "channel_join",
+        "text": "<@U0693LV1V|koara-local> has joined the channel",
+        "ts": "1434111066.396748"
+    },
+    {
+        "user": "U0693NXDK",
+        "type": "message",
+        "subtype": "channel_join",
+        "text": "<@U0693NXDK|koheiarao> has joined the channel",
+        "ts": "1434111306.000002"
+    }
+]
