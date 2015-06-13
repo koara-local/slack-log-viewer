@@ -44,10 +44,13 @@ html
 
                 div#channelMassages.col-sm-9.col-sm-offset-3.col-md-10.col-md-offset-2.main
                     h1.page-header Dashboard
-                    div
-                        ul
-                            li(v-repeat="massages")
-                                a {{ text }}
+                    div.media(v-repeat="massages")
+                        div.media-left
+                            a(href="#")
+                            img.media-object(src="{{ icons.image_48 }}" alt="48x48")
+                        div.media-body
+                            h4.media-heading {{ username }}
+                            {{ text }}
 
     link(rel='stylesheet', href='assets/css/viewer.css')
     script(src='assets/js/read-json.js')
