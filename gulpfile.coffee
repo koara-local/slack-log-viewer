@@ -5,11 +5,29 @@ notify     = require "gulp-notify"
 jade       = require "gulp-jade"
 uglify     = require "gulp-uglify"
 minifyCss  = require "gulp-minify-css"
+concat     = require "gulp-concat"
 browser    = require "browser-sync"
 
 # browser-sync server
 gulp.task 'server', () ->
   browser({server:{baseDir:"deploy/"}})
+
+# concat depends library
+files_concat =
+  js  : ['deploy/bower_components/**/dist/*.min.js']
+  css : ['deploy/bower_components/**/dist/**/*.min.css']
+
+gulp.task 'concat_js', () ->
+  gulp.src(files_concat.js)
+    .pipe(concat('lib.concat.js'))
+    .pipe(gulp.dest('deploy/assets/js'))
+    .pipe(browser.reload({stream:true}))
+
+gulp.task 'concat_css', () ->
+  gulp.src(files_concat.css)
+    .pipe(concat('lib.concat.css'))
+    .pipe(gulp.dest('deploy/assets/css'))
+    .pipe(browser.reload({stream:true}))
 
 # HTML
 gulp.task 'compile-jade', () ->
@@ -45,11 +63,15 @@ gulp.task 'css', () ->
 # run & watch
 gulp.task 'default', ['server'], () ->
   gulp.run([
+    'concat_js',
+    'concat_css',
     'compile-coffee',
     'compile-jade',
     'js'
     'css'
   ])
+  gulp.watch(files_concat.js, ['concat_js'])
+  gulp.watch(files_concat.css, ['concat_css'])
   gulp.watch(["src/coffee/*.coffee"], ["compile-coffee"])
   gulp.watch(["src/jade/*.jade"], ["compile-jade"])
   gulp.watch(["src/js/*.js"], ["js"])
