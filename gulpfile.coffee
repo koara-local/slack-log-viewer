@@ -10,23 +10,23 @@ browser    = require "browser-sync"
 
 # browser-sync server
 gulp.task 'server', () ->
-  browser({server:{baseDir:"deploy/"}})
+  browser({server:{baseDir:"."}})
 
 # concat depends library
 files_concat =
-  js  : ['deploy/bower_components/**/dist/*.min.js']
-  css : ['deploy/bower_components/**/dist/**/*.min.css']
+  js  : ['bower_components/**/dist/*.min.js']
+  css : ['bower_components/**/dist/**/*.min.css']
 
 gulp.task 'concat_js', () ->
   gulp.src(files_concat.js)
     .pipe(concat('lib.concat.js'))
-    .pipe(gulp.dest('deploy/assets/js'))
+    .pipe(gulp.dest('assets/js'))
     .pipe(browser.reload({stream:true}))
 
 gulp.task 'concat_css', () ->
   gulp.src(files_concat.css)
     .pipe(concat('lib.concat.css'))
-    .pipe(gulp.dest('deploy/assets/css'))
+    .pipe(gulp.dest('assets/css'))
     .pipe(browser.reload({stream:true}))
 
 # HTML
@@ -34,7 +34,7 @@ gulp.task 'compile-jade', () ->
   gulp.src('src/jade/*.jade')
     .pipe(plumber({errorHandler: notify.onError('<%= error.message %>')}))
     .pipe(jade({pretty:true}))
-    .pipe(gulp.dest('deploy/'))
+    .pipe(gulp.dest('.'))
     .pipe(browser.reload({stream:true}))
 
 # JavaScript
@@ -49,7 +49,7 @@ gulp.task 'js', () ->
   gulp.src('src/js/*.js')
     .pipe(plumber({errorHandler: notify.onError('<%= error.message %>')}))
     .pipe(uglify())
-    .pipe(gulp.dest('deploy/assets/js/'))
+    .pipe(gulp.dest('assets/js/'))
     .pipe(browser.reload({stream:true}))
 
 # CSS
@@ -57,7 +57,7 @@ gulp.task 'css', () ->
   gulp.src('src/css/*.css')
     .pipe(plumber({errorHandler: notify.onError('<%= error.message %>')}))
     .pipe(minifyCss())
-    .pipe(gulp.dest('deploy/assets/css/'))
+    .pipe(gulp.dest('assets/css/'))
     .pipe(browser.reload({stream:true}))
 
 # run & watch
