@@ -1,6 +1,7 @@
 gulp    = require "gulp"
 coffee  = require "gulp-coffee"
 plumber = require "gulp-plumber"
+notify  = require "gulp-notify"
 jade    = require "gulp-jade"
 uglify  = require "gulp-uglify"
 browser = require "browser-sync"
@@ -10,21 +11,21 @@ gulp.task 'server', () ->
 
 gulp.task 'compile-coffee', () ->
   gulp.src('src/coffee/*.coffee')
-    .pipe(plumber())
+    .pipe(plumber({errorHandler: notify.onError('<%= error.message %>')}))
     .pipe(coffee())
     .pipe(gulp.dest('src/js/'))
     .pipe(browser.reload({stream:true}))
 
 gulp.task 'compile-jade', () ->
   gulp.src('src/jade/*.jade')
-    .pipe(plumber())
+    .pipe(plumber({errorHandler: notify.onError('<%= error.message %>')}))
     .pipe(jade({pretty:true}))
     .pipe(gulp.dest('deploy/'))
     .pipe(browser.reload({stream:true}))
 
 gulp.task 'js', () ->
   gulp.src('src/js/*.js')
-    .pipe(plumber())
+    .pipe(plumber({errorHandler: notify.onError('<%= error.message %>')}))
     .pipe(uglify())
     .pipe(gulp.dest('deploy/assets/js'))
     .pipe(browser.reload({stream:true}))
