@@ -41,6 +41,7 @@ channelMassages = new Vue({
             name: ''
         },
         massages: [],
+        fileList: [],
         userData: []
     },
     methods: {
@@ -61,44 +62,74 @@ channelMassages = new Vue({
             });
             console.log("update user data done");
         },
-        updateChannelMassages: function(channelname) {
-            var path = dataPath + channelname + "/" + "2015-06-12.json";
-            console.log("load json data : " + path);
+        updateFileList: function(channelName) {
+            var path = dataPath + channelName + "/" + "filelist.json";
+            console.log("load channel filelist : " + path);
 
-            $.getJSON(path, function(data) {
-                var len = data.length;
-                var massages = [];
+            $.ajax({
+                type: "GET",
+                url: path,
+                async: false
+            }).done(function(data){
+                // clear userdata
+                channelMassages.fileList = [];
+                // update
+                channelMassages.fileList = data;
+                console.log(data);
+            });
+            console.log("update channel filelist done");
+        },
+        updateChannelMassages: function(channelName) {
+            // clear channel messages
+            channelMassages.massages = [];
 
-                for(var i = 0; i < len; i++) {
-                    var message = data[i];
+            console.log("fileList.length : " + this.fileList.length);
+            for(var j = 0; j < this.fileList.length; j++) {
+                var path = dataPath + channelName + "/" + this.fileList[j];
+                console.log("load json data : " + path);
 
-                    if (message.icons === undefined) {
-                        if (message.user === undefined) {
-                            // if no icon image, add dummy icon
-                            message.icons = { image_48: 'assets/icon/dummy.png' };
-                        } else {
-                            // FIXME
-                            // update user icom
-                            channelMassages.userData.filter(function(item, index) {
-                                if (item.id === message.user) {
-                                    message.icons = { image_48:  item.profile.image_48 };
-                                }
-                            });
+                $.ajax({
+                    type: "GET",
+                    url: path,
+                    async: false
+                }).done(function(data){
+                    var len = data.length;
+                    var massages = [];
+
+                    for(var i = 0; i < len; i++) {
+                        var message = data[i];
+
+                        if (message.icons === undefined) {
+                            if (message.user === undefined) {
+                                // if no icon image, add dummy icon
+                                message.icons = { image_48: 'assets/icon/dummy.png' };
+                            } else {
+                                // FIXME
+                                // update user icom
+                                channelMassages.userData.filter(function(item, index) {
+                                    if (item.id === message.user) {
+                                        message.icons = { image_48:  item.profile.image_48 };
+                                    }
+                                });
+                            }
                         }
+
+                        massages.push(message);
                     }
 
-                    massages.push(message);
-                }
-
-                // clear channel messages
-                channelMassages.massages = [];
-                // update
-                channelMassages.massages = massages;
-            });
+                    // update
+                    for (var i = 0; i < massages.length; i++) {
+                        channelMassages.massages.push(massages[i]);
+                    }
+                    console.log(channelMassages.massages);
+                });
+            }
         },
         onChangeChannel: function() {
+            var channelName = channelMassages.channel.name;
             this.updateUserData();
-            this.updateChannelMassages(channelMassages.channel.name);
+            this.updateFileList(channelName);
+            this.updateChannelMassages(channelName);
         }
     },
     watch: {
