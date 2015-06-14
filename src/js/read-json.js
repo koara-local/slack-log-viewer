@@ -11,16 +11,20 @@ channelList = new Vue({
     methods: {
         onClick: function(e) {
             channelMassages.channel.name = e.target.innerHTML.slice(1);
-            console.log(channelMassages.channel.name);
+            console.log("channel switched : " + channelMassages.channel.name);
+        },
+        updateChannelList: function() {
+            $.getJSON(dataPath + "channels.json", function(data) {
+                var len = data.length;
+                for(var i = 0; i < len; i++) {
+                    channelList.channels.push(data[i]);
+                }
+            });
         }
     },
     created: function() {
-        $.getJSON(dataPath + "channels.json", function(data) {
-            var len = data.length;
-            for(var i = 0; i < len; i++) {
-                channelList.channels.push(data[i]);
-            }
-        });
+        console.log("channelList created");
+        this.updateChannelList();
     }
 })
 
@@ -32,12 +36,10 @@ channelMassages = new Vue({
         },
         massages: []
     },
-    watch: {
-        'channel.name' : function() {
+    methods: {
+        updateChannelMassages: function() {
             var path = dataPath + channelMassages.channel.name + "/" + "2015-06-12.json";
-            console.log(path);
-
-            channelMassages.massages = [];
+            console.log("load json data : " + path);
 
             $.getJSON(path, function(data) {
                 var len = data.length;
@@ -52,6 +54,20 @@ channelMassages = new Vue({
                     channelMassages.massages.push(message);
                 }
             });
+
+        },
+        changeChannel: function() {
+            // clear channel messages
+            channelMassages.massages = [];
+            this.updateChannelMassages();
         }
+    },
+    watch: {
+        'channel.name' : function() {
+            this.changeChannel();
+        }
+    },
+    created: function() {
+        console.log("channelMassages created");
     }
 })
