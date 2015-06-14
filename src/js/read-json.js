@@ -49,6 +49,8 @@ channelMassages = new Vue({
 
             $.getJSON(path, function(data) {
                 var len = data.length;
+                var massages = [];
+
                 for(var i = 0; i < len; i++) {
                     var message = data[i];
 
@@ -57,19 +59,25 @@ channelMassages = new Vue({
                         message.icons = { image_48: 'assets/icon/dummy.png' };
                     }
 
-                    channelMassages.massages.push(message);
+                    massages.push(message);
                 }
+
+                // clear channel messages
+                channelMassages.massages = [];
+                // update
+                channelMassages.massages = massages;
             });
         },
-        changeChannel: function() {
-            // clear channel messages
-            channelMassages.massages = [];
+        onChangeChannel: function() {
             this.updateChannelMassages(channelMassages.channel.name);
         }
     },
     watch: {
         'channel.name' : function() {
-            this.changeChannel();
+            this.onChangeChannel();
+        },
+        'massages' : function() {
+            console.log('massages updated');
         }
     },
     created: function() {
