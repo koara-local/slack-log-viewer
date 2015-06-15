@@ -121,14 +121,14 @@
             return results;
           });
         }
+        this.$set('massages_updated', this.massages);
         return console.log("update channel messages done");
       },
       onChangeChannel: function() {
         channelName = this.channel.name;
         this.updateUserData();
         this.updateFileList(channelName);
-        this.updateChannelMassages(channelName);
-        return this.$set('massages_updated', this.massages);
+        return this.updateChannelMassages(channelName);
       }
     },
     watch: {

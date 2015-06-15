@@ -45,7 +45,6 @@ channelMassages = new Vue
         # update
         channelMassages.$set('userData', data)
       console.log("update user data done")
-
     updateFileList: (channelName) ->
       path = dataPath + channelName + "/" + "filelist.json"
       console.log("load channel filelist : " + path)
@@ -57,7 +56,6 @@ channelMassages = new Vue
         # update
         channelMassages.$set('fileList', data)
       console.log("update channel filelist done")
-
     updateChannelMassages: (channelName) ->
       console.log("update channel messages")
       console.log("fileList.length : " + @fileList.length)
@@ -73,12 +71,12 @@ channelMassages = new Vue
           messages = []
           for message in data
             if message.icons == undefined
+              # check & update icon
               if message.user == undefined
-                # if no icon image, add dummy icon
+                # if no icon image & no user -> add dummy icon
                 message.icons = { image_48: 'assets/icon/dummy.png' }
               else
-                # FIXME
-                # update user icom
+                # exist user -> update user icom
                 channelMassages.userData.filter (item, index) ->
                   if item.id == message.user
                     message.icons = { image_48: item.profile.image_48 }
@@ -86,20 +84,17 @@ channelMassages = new Vue
           # update
           for value in messages
             channelMassages.massages.push(value)
+      @$set('massages_updated', @massages)
       console.log("update channel messages done")
-
     onChangeChannel: () ->
       channelName = @channel.name
       @updateUserData()
       @updateFileList(channelName)
       @updateChannelMassages(channelName)
-      @$set('massages_updated', @massages)
-
   watch:
     'channel.name' : () ->
       @onChangeChannel()
     'massages' : () ->
       console.log('massages updated')
-
   created: () ->
     console.log("channelMassages created")
