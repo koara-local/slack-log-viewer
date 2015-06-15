@@ -20,7 +20,7 @@ html
                     span.icon-bar
                     span.icon-bar
                     span.icon-bar
-                a(href="#").navbar-brand Slack Log Viewer
+                a(href="#").navbar-brand Slack Log Viewer v0.1
                 div#navbar.navbar-collapse.collapse
                     ul.nav.navbar-nav.navbar-right
                         li
@@ -36,13 +36,12 @@ html
 
         div.container-fluid
             div.raw
-                div#channelList.col-sm-3.col-md-2.sidebar
+                div#channelList.sidebar.mCustomScrollbar(data-mcs-theme="light-thick")
                     ul.nav.nav-sidebar
                         li(v-repeat="channels")
-                            a(v-on="click: onClick") \#{{ name }}
+                            a#channel(v-on="click: onClick") \#{{ name }}
 
-
-                div#channelMassages.col-sm-9.col-sm-offset-3.col-md-10.col-md-offset-2.main
+                div#channelMassages
                     h1.page-header \#{{ channel.name }}
                     div.media(v-repeat="massages_updated")
                         div.media-left

@@ -1,6 +1,13 @@
 (function() {
   var channelList, channelMassages, channelName, dataPath;
 
+  $(".sidebar").mCustomScrollbar({
+    mouseWheel: {
+      deltaFactor: 100
+    },
+    autoHideScrollbar: true
+  });
+
   dataPath = "data/";
 
   channelName = "general/";

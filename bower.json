@@ -17,6 +17,7 @@
   "devDependencies": {
     "bootstrap": "~3.3.4",
     "vue": "~0.12.0",
-    "jquery": "~2.1.4"
+    "jquery": "~2.1.4",
+    "malihu-custom-scrollbar-plugin": "~3.0.9"
   }
 }

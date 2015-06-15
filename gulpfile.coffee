@@ -14,8 +14,14 @@ gulp.task 'server', () ->
 
 # concat depends library
 files_concat =
-  js  : ['bower_components/**/dist/*.min.js']
-  css : ['bower_components/**/dist/**/*.min.css']
+  js  : [
+    'bower_components/**/dist/*.min.js'
+    'bower_components/malihu-custom-scrollbar-plugin/jquery.mCustomScrollbar.concat.min.js'
+  ]
+  css : [
+    'bower_components/**/dist/**/*.min.css'
+    'bower_components/malihu-custom-scrollbar-plugin/jquery.mCustomScrollbar.min.css'
+  ]
 
 gulp.task 'concat_js', () ->
   gulp.src(files_concat.js)
