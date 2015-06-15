@@ -59,32 +59,37 @@ channelMassages = new Vue
     updateChannelMassages: (channelName) ->
       console.log("update channel messages")
       console.log("fileList.length : " + @fileList.length)
+      @$set('massages_updated', [])
       @massages = []
+      deferreds = []
       for filename in @fileList
         path = dataPath + channelName + "/" + filename
         console.log("load json data : " + path)
-        $.ajax
-          type: "GET"
-          url: path
-          async: false
-        .done (data) ->
-          messages = []
-          for message in data
-            if message.icons == undefined
-              # check & update icon
-              if message.user == undefined
-                # if no icon image & no user -> add dummy icon
-                message.icons = { image_48: 'assets/icon/dummy.png' }
-              else
-                # exist user -> update user icom
-                channelMassages.userData.filter (item, index) ->
-                  if item.id == message.user
-                    message.icons = { image_48: item.profile.image_48 }
-            messages.push(message)
-          # update
-          for value in messages
-            channelMassages.massages.push(value)
-      @$set('massages_updated', @massages)
+        readfile =
+          $.ajax
+            type: "GET"
+            url: path
+            async: true
+          .done (data) ->
+            messages = []
+            for message in data
+              if message.icons == undefined
+                # check & update icon
+                if message.user == undefined
+                  # if no icon image & no user -> add dummy icon
+                  message.icons = { image_48: 'assets/icon/dummy.png' }
+                else
+                  # exist user -> update user icom
+                  channelMassages.userData.filter (item, index) ->
+                    if item.id == message.user
+                      message.icons = { image_48: item.profile.image_48 }
+              messages.push(message)
+            # update
+            for value in messages
+              channelMassages.massages.push(value)
+        deferreds.push(readfile)
+      $.when.apply($, deferreds).done () ->
+        channelMassages.$set('massages_updated', channelMassages.massages)
       console.log("update channel messages done")
     onChangeChannel: () ->
       channelName = @channel.name

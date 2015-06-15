@@ -78,19 +78,21 @@
         return console.log("update channel filelist done");
       },
       updateChannelMassages: function(channelName) {
-        var filename, i, len, path, ref;
+        var deferreds, filename, i, len, path, readfile, ref;
         console.log("update channel messages");
         console.log("fileList.length : " + this.fileList.length);
+        this.$set('massages_updated', []);
         this.massages = [];
+        deferreds = [];
         ref = this.fileList;
         for (i = 0, len = ref.length; i < len; i++) {
           filename = ref[i];
           path = dataPath + channelName + "/" + filename;
           console.log("load json data : " + path);
-          $.ajax({
+          readfile = $.ajax({
             type: "GET",
             url: path,
-            async: false
+            async: true
           }).done(function(data) {
             var j, k, len1, len2, message, messages, results, value;
             messages = [];
@@ -120,8 +122,11 @@
             }
             return results;
           });
+          deferreds.push(readfile);
         }
-        this.$set('massages_updated', this.massages);
+        $.when.apply($, deferreds).done(function() {
+          return channelMassages.$set('massages_updated', channelMassages.massages);
+        });
         return console.log("update channel messages done");
       },
       onChangeChannel: function() {
