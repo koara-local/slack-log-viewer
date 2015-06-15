@@ -41,11 +41,17 @@ channelMassages = new Vue({
             name: ''
         },
         massages: [],
+        massages_updated: [],
         fileList: [],
         userData: []
     },
     methods: {
         updateUserData: function() {
+            if (this.userData.length > 0) {
+                // allready updated
+                return;
+            }
+
             var path = dataPath + "users.json";
             console.log("load user data : " + path);
 
@@ -54,12 +60,10 @@ channelMassages = new Vue({
                 url: path,
                 async: false
             }).done(function(data){
-                // clear userdata
-                channelMassages.userData = [];
                 // update
-                channelMassages.userData = data;
-                console.log(data);
+                channelMassages.$set('userData', data);
             });
+
             console.log("update user data done");
         },
         updateFileList: function(channelName) {
