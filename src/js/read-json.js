@@ -121,7 +121,6 @@ channelMassages = new Vue({
                     for (var i = 0; i < massages.length; i++) {
                         channelMassages.massages.push(massages[i]);
                     }
-                    console.log(channelMassages.massages);
                 });
             }
         },
@@ -130,6 +129,7 @@ channelMassages = new Vue({
             this.updateUserData();
             this.updateFileList(channelName);
             this.updateChannelMassages(channelName);
+            this.$set('massages_updated', this.massages)
         }
     },
     watch: {
