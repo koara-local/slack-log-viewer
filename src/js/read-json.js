@@ -120,6 +120,17 @@
                   });
                 }
               }
+              if (message.username === void 0) {
+                if (message.user === void 0) {
+                  message.username = 'unknown';
+                } else {
+                  channelMassages.userData.filter(function(item, index) {
+                    if (item.id === message.user && item.name !== void 0) {
+                      return message.username = item.name;
+                    }
+                  });
+                }
+              }
               messages.push(message);
             }
             results = [];

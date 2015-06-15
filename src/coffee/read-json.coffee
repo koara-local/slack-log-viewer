@@ -88,6 +88,17 @@ channelMassages = new Vue
                   channelMassages.userData.filter (item, index) ->
                     if item.id == message.user
                       message.icons = { image_48: item.profile.image_48 }
+              if message.username == undefined
+                # check & update name
+                if message.user == undefined
+                  # if no user
+                  # FIXME
+                  message.username = 'unknown' 
+                else
+                  # exist user -> update user.name
+                  channelMassages.userData.filter (item, index) ->
+                    if item.id == message.user && item.name != undefined
+                        message.username = item.name
               messages.push(message)
             # update
             for value in messages
