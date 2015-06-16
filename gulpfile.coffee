@@ -18,6 +18,7 @@ files_concat =
     'bower_components/**/dist/*.min.js'
     'bower_components/malihu-custom-scrollbar-plugin/jquery.mCustomScrollbar.concat.min.js'
     'bower_components/moment/min/moment-with-locales.min.js'
+    'bower_components/marked/marked.min.js'
   ]
   css : [
     'bower_components/**/dist/**/*.min.css'

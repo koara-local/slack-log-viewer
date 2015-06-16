@@ -39,10 +39,12 @@
           <div class="media-body">
             <h4 class="media-heading">{{ username }}<small id="messageIsBot" v-if="bot_id">BOT</small><small id="messageTimestamp">{{ fixedTimestamp }}</small></h4>
             <div>
-              <p>{{ textFixed }}</p>
+              <p v-html="textFixed"></p>
             </div>
             <blockquote id="messageBlockQuote" v-if="attachments">
-              <p v-repeat="attachments">{{ attachments[$index].text }}</p>
+              <div v-repeat="attachments">
+                <p v-html="attachments[$index].textFixed"></p>
+              </div>
             </blockquote>
           </div>
         </div>

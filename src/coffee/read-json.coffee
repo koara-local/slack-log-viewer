@@ -105,10 +105,10 @@ channelMassages = new Vue
               message.fixedTimestamp =
                 moment.unix(unixEpoch).format('YYYY/MM/DD hh:mm')
               # !! fix text
-              message.textFixed = message.text.replace(/\n/g, "<br>")
-              if message.attachment != undefined
-                message.attachment.text = message.attachmen.text.replace(/\n/g, "<br>")
-              # push
+              message.textFixed = marked(message.text)
+              if message.attachments != undefined
+                for att in message.attachments
+                  att.textFixed = marked(att.text)
               messages.push(message)
             # update
             for value in messages

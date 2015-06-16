@@ -54,10 +54,10 @@ html
                             small#messageIsBot(v-if="bot_id") BOT
                             small#messageTimestamp {{ fixedTimestamp }}
                         div
-                            p {{ textFixed }}
+                            p(v-html="textFixed")
                         blockquote#messageBlockQuote(v-if="attachments")
-                            p(v-repeat="attachments")
-                                {{ attachments[$index].text }}
+                            div(v-repeat="attachments")
+                                p(v-html="attachments[$index].textFixed")
 
     link(rel='stylesheet', href='assets/css/viewer.css')
     script(src='assets/js/read-json.js')

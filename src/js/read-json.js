@@ -101,7 +101,7 @@
             url: path,
             async: true
           }).done(function(data) {
-            var j, k, len1, len2, message, messages, results, unixEpoch, value;
+            var att, j, k, l, len1, len2, len3, message, messages, ref1, results, unixEpoch, value;
             messages = [];
             for (j = 0, len1 = data.length; j < len1; j++) {
               message = data[j];
@@ -133,15 +133,19 @@
               }
               unixEpoch = String(message.ts).split(".")[0];
               message.fixedTimestamp = moment.unix(unixEpoch).format('YYYY/MM/DD hh:mm');
-              message.textFixed = message.text.replace(/\n/g, "<br>");
-              if (message.attachment !== void 0) {
-                message.attachment.text = message.attachmen.text.replace(/\n/g, "<br>");
+              message.textFixed = marked(message.text);
+              if (message.attachments !== void 0) {
+                ref1 = message.attachments;
+                for (k = 0, len2 = ref1.length; k < len2; k++) {
+                  att = ref1[k];
+                  att.textFixed = marked(att.text);
+                }
               }
               messages.push(message);
             }
             results = [];
-            for (k = 0, len2 = messages.length; k < len2; k++) {
-              value = messages[k];
+            for (l = 0, len3 = messages.length; l < len3; l++) {
+              value = messages[l];
               results.push(channelMassages.massages.push(value));
             }
             return results;
