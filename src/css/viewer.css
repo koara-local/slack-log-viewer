@@ -6,11 +6,6 @@ body {
     border: 0;
 }
 
-
-a#channel {
-    color: #AB9BA9;
-}
-
 .sidebar {
     position: fixed;
     top: 51px;
@@ -19,12 +14,36 @@ a#channel {
     left: 0;
     z-index: 1000;
     display: block;
-    padding-left: 10px;
-    padding-top: 10px;
+    padding-left: 0;
+    padding-top: 5px;
+    padding-bottom: 0;
+    margin-right: 0;
     overflow-x: hidden;
     overflow-y: auto; /* Scrollable contents if viewport is shorter than content. */
     background-color: #453744;
     border-right: 1px solid #eee;
+}
+
+li#channelListBox {
+    height: 30px;
+}
+
+li#channelListBox > a {
+    color: #AB9BA9;
+    padding-top: 5px;
+    padding-bottom: 5px;
+}
+
+div#channelListHeader {
+    height: 30px;
+}
+
+div#channelListFotter {
+    height: 100px;
+}
+
+.mCSB_inside > .mCSB_container {
+    margin-right: 15px;
 }
 
 .nav-sidebar > li > a:hover,

@@ -38,8 +38,10 @@ html
             div.raw
                 div#channelList.sidebar.mCustomScrollbar(data-mcs-theme="light-thick")
                     ul.nav.nav-sidebar
-                        li(v-repeat="channels")
-                            a#channel(v-on="click: onClick") \#{{ name }}
+                        div#channelListHeader
+                        li#channelListBox(v-repeat="channels")
+                            a(v-on="click: onClick") \#{{ name }}
+                        div#channelListFotter
 
                 div#channelMassages
                     h1.page-header \#{{ channel.name }}

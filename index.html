@@ -28,7 +28,9 @@
       <div class="raw">
         <div id="channelList" data-mcs-theme="light-thick" class="sidebar mCustomScrollbar">
           <ul class="nav nav-sidebar">
-            <li v-repeat="channels"><a id="channel" v-on="click: onClick">#{{ name }}</a></li>
+            <div id="channelListHeader"></div>
+            <li id="channelListBox" v-repeat="channels"><a v-on="click: onClick">#{{ name }}</a></li>
+            <div id="channelListFotter"></div>
           </ul>
         </div>
         <div id="channelMassages">
