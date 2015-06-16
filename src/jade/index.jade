@@ -51,7 +51,11 @@ html
                             img.media-object(src="{{ icons.image_48 }}" alt="48x48")
                         div.media-body
                             h4.media-heading {{ username }}
-                            {{ text }}
+                            div
+                                {{ text }}
+                            div
+                                // FIXME
+                                {{ attachments[0].text }}
 
     link(rel='stylesheet', href='assets/css/viewer.css')
     script(src='assets/js/read-json.js')
