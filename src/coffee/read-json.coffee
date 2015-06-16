@@ -78,8 +78,8 @@ channelMassages = new Vue
           .done (data) ->
             messages = []
             for message in data
+              # !! fix icon
               if message.icons == undefined
-                # check & update icon
                 if message.user == undefined
                   # if no icon image & no user -> add dummy icon
                   message.icons = { image_48: 'assets/icon/dummy.png' }
@@ -88,6 +88,7 @@ channelMassages = new Vue
                   channelMassages.userData.filter (item, index) ->
                     if item.id == message.user
                       message.icons = { image_48: item.profile.image_48 }
+              # !! fix username
               if message.username == undefined
                 # check & update name
                 if message.user == undefined
@@ -99,6 +100,11 @@ channelMassages = new Vue
                   channelMassages.userData.filter (item, index) ->
                     if item.id == message.user && item.name != undefined
                         message.username = item.name
+              # !! fix timestamp
+              unixEpoch = String(message.ts).split(".")[0]
+              message.fixedTimestamp =
+                moment.unix(unixEpoch).format('YYYY/MM/DD hh:mm')
+              # push
               messages.push(message)
             # update
             for value in messages

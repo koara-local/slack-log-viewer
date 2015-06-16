@@ -53,7 +53,7 @@ html
                             h4.media-heading
                                 {{ username }}
                                 small#messageIsBot(v-if="bot_id") BOT
-                                small#messageTimestamp {{ ts }}
+                                small#messageTimestamp {{ fixedTimestamp }}
                             div
                                 p {{ text }}
                             blockquote#messageBlockQuote(v-if="attachments")

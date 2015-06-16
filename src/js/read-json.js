@@ -101,7 +101,7 @@
             url: path,
             async: true
           }).done(function(data) {
-            var j, k, len1, len2, message, messages, results, value;
+            var j, k, len1, len2, message, messages, results, unixEpoch, value;
             messages = [];
             for (j = 0, len1 = data.length; j < len1; j++) {
               message = data[j];
@@ -131,6 +131,8 @@
                   });
                 }
               }
+              unixEpoch = String(message.ts).split(".")[0];
+              message.fixedTimestamp = moment.unix(unixEpoch).format('YYYY/MM/DD hh:mm');
               messages.push(message);
             }
             results = [];
