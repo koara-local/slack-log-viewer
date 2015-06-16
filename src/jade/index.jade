@@ -48,14 +48,17 @@ html
                     div.media(v-repeat="massages_updated")
                         div.media-left
                             a(href="#")
-                            img.media-object(src="{{ icons.image_48 }}" alt="48x48")
+                            img.media-object(v-attr="src: icons.image_48" alt="48x48")
                         div.media-body
-                            h4.media-heading {{ username }}
+                            h4.media-heading
+                                {{ username }}
+                                small#messageIsBot(v-if="bot_id") BOT
+                                small#messageTimestamp {{ ts }}
                             div
-                                {{ text }}
-                            div
-                                // FIXME
-                                {{ attachments[0].text }}
+                                p {{ text }}
+                            blockquote#messageBlockQuote(v-if="attachments")
+                                p(v-repeat="attachments")
+                                    {{ attachments[$index].text }}
 
     link(rel='stylesheet', href='assets/css/viewer.css')
     script(src='assets/js/read-json.js')

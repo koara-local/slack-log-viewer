@@ -63,3 +63,17 @@ div#channelMassages {
     padding-left: 30px;
     width: auto;
 }
+
+small#messageIsBot {
+    margin-left: 6px;
+    margin-right: 0;
+}
+
+small#messageTimestamp {
+    margin-left: 6px;
+    margin-right: 0;
+}
+
+blockquote#messageBlockQuote {
+    font-size: 14px;
+}

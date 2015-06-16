@@ -36,13 +36,15 @@
         <div id="channelMassages">
           <h1 class="page-header">#{{ channel.name }}</h1>
           <div v-repeat="massages_updated" class="media">
-            <div class="media-left"><a href="#"></a><img src="{{ icons.image_48 }}" alt="48x48" class="media-object"></div>
+            <div class="media-left"><a href="#"></a><img v-attr="src: icons.image_48" alt="48x48" class="media-object"></div>
             <div class="media-body">
-              <h4 class="media-heading">{{ username }}</h4>
-              <div>{{ text }}</div>
+              <h4 class="media-heading">{{ username }}<small id="messageIsBot" v-if="bot_id">BOT</small><small id="messageTimestamp">{{ ts }}</small></h4>
               <div>
-                <!-- FIXME-->{{ attachments[0].text }}
+                <p>{{ text }}</p>
               </div>
+              <blockquote id="messageBlockQuote" v-if="attachments">
+                <p v-repeat="attachments">{{ attachments[$index].text }}</p>
+              </blockquote>
             </div>
           </div>
         </div>
