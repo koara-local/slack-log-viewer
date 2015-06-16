@@ -35,30 +35,29 @@ html
                         input(type="text" class="form-control" placeholder="Search...")
 
         div.container-fluid
-            div.raw
-                div#channelList.sidebar.mCustomScrollbar(data-mcs-theme="light-thick")
-                    ul.nav.nav-sidebar
-                        div#channelListHeader
-                        li#channelListBox(v-repeat="channels")
-                            a(v-on="click: onClick") \#{{ name }}
-                        div#channelListFotter
+            div#channelList.sidebar.mCustomScrollbar(data-mcs-theme="light-thick")
+                ul.nav.nav-sidebar
+                    div#channelListHeader
+                    li#channelListBox(v-repeat="channels")
+                        a(v-on="click: onClick") \#{{ name }}
+                    div#channelListFotter
 
-                div#channelMassages
-                    h1.page-header \#{{ channel.name }}
-                    div.media(v-repeat="massages_updated")
-                        div.media-left
-                            a(href="#")
-                            img.media-object(v-attr="src: icons.image_48" alt="48x48")
-                        div.media-body
-                            h4.media-heading
-                                {{ username }}
-                                small#messageIsBot(v-if="bot_id") BOT
-                                small#messageTimestamp {{ fixedTimestamp }}
-                            div
-                                p {{ text }}
-                            blockquote#messageBlockQuote(v-if="attachments")
-                                p(v-repeat="attachments")
-                                    {{ attachments[$index].text }}
+            div#channelMassages
+                h1.page-header \#{{ channel.name }}
+                div.media(v-repeat="massages_updated")
+                    div.media-left
+                        a(href="#")
+                        img.media-object(v-attr="src: icons.image_48" alt="48x48")
+                    div.media-body
+                        h4.media-heading
+                            {{ username }}
+                            small#messageIsBot(v-if="bot_id") BOT
+                            small#messageTimestamp {{ fixedTimestamp }}
+                        div
+                            p {{ textFixed }}
+                        blockquote#messageBlockQuote(v-if="attachments")
+                            p(v-repeat="attachments")
+                                {{ attachments[$index].text }}
 
     link(rel='stylesheet', href='assets/css/viewer.css')
     script(src='assets/js/read-json.js')

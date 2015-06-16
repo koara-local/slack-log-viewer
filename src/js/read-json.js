@@ -133,6 +133,10 @@
               }
               unixEpoch = String(message.ts).split(".")[0];
               message.fixedTimestamp = moment.unix(unixEpoch).format('YYYY/MM/DD hh:mm');
+              message.textFixed = message.text.replace(/\n/g, "<br>");
+              if (message.attachment !== void 0) {
+                message.attachment.text = message.attachmen.text.replace(/\n/g, "<br>");
+              }
               messages.push(message);
             }
             results = [];

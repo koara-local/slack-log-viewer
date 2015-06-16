@@ -25,27 +25,25 @@
       </div>
     </nav>
     <div class="container-fluid">
-      <div class="raw">
-        <div id="channelList" data-mcs-theme="light-thick" class="sidebar mCustomScrollbar">
-          <ul class="nav nav-sidebar">
-            <div id="channelListHeader"></div>
-            <li id="channelListBox" v-repeat="channels"><a v-on="click: onClick">#{{ name }}</a></li>
-            <div id="channelListFotter"></div>
-          </ul>
-        </div>
-        <div id="channelMassages">
-          <h1 class="page-header">#{{ channel.name }}</h1>
-          <div v-repeat="massages_updated" class="media">
-            <div class="media-left"><a href="#"></a><img v-attr="src: icons.image_48" alt="48x48" class="media-object"></div>
-            <div class="media-body">
-              <h4 class="media-heading">{{ username }}<small id="messageIsBot" v-if="bot_id">BOT</small><small id="messageTimestamp">{{ fixedTimestamp }}</small></h4>
-              <div>
-                <p>{{ text }}</p>
-              </div>
-              <blockquote id="messageBlockQuote" v-if="attachments">
-                <p v-repeat="attachments">{{ attachments[$index].text }}</p>
-              </blockquote>
+      <div id="channelList" data-mcs-theme="light-thick" class="sidebar mCustomScrollbar">
+        <ul class="nav nav-sidebar">
+          <div id="channelListHeader"></div>
+          <li id="channelListBox" v-repeat="channels"><a v-on="click: onClick">#{{ name }}</a></li>
+          <div id="channelListFotter"></div>
+        </ul>
+      </div>
+      <div id="channelMassages">
+        <h1 class="page-header">#{{ channel.name }}</h1>
+        <div v-repeat="massages_updated" class="media">
+          <div class="media-left"><a href="#"></a><img v-attr="src: icons.image_48" alt="48x48" class="media-object"></div>
+          <div class="media-body">
+            <h4 class="media-heading">{{ username }}<small id="messageIsBot" v-if="bot_id">BOT</small><small id="messageTimestamp">{{ fixedTimestamp }}</small></h4>
+            <div>
+              <p>{{ textFixed }}</p>
             </div>
+            <blockquote id="messageBlockQuote" v-if="attachments">
+              <p v-repeat="attachments">{{ attachments[$index].text }}</p>
+            </blockquote>
           </div>
         </div>
       </div>

@@ -58,10 +58,10 @@ div#channelListFotter {
 }
 
 div#channelMassages {
+    width: 900px;
     position: absolute;
     left: 220px;
     padding-left: 30px;
-    width: auto;
 }
 
 small#messageIsBot {
