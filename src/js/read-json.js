@@ -1,5 +1,5 @@
 (function() {
-  var channelInfo, channelList, channelMassages, channelName, dataPath;
+  var channelInfo, channelList, channelMessages, channelName, dataPath;
 
   $(".sidebar").mCustomScrollbar({
     mouseWheel: {
@@ -48,16 +48,16 @@
     },
     watch: {
       'name': function() {
-        return channelMassages.onChangeChannel();
+        return channelMessages.onChangeChannel();
       }
     }
   });
 
-  channelMassages = new Vue({
-    el: '#channelMassages',
+  channelMessages = new Vue({
+    el: '#channelMessages',
     data: {
-      massages: [],
-      massages_updated: [],
+      messages: [],
+      messages_update: [],
       fileList: [],
       fileListNum: 0,
       userData: [],
@@ -76,7 +76,7 @@
           url: path,
           async: false
         }).done(function(data) {
-          return channelMassages.$set('userData', data);
+          return channelMessages.$set('userData', data);
         });
         return console.log("update user data done");
       },
@@ -89,11 +89,11 @@
           url: path,
           async: false
         }).done(function(data) {
-          return channelMassages.$set('fileList', data);
+          return channelMessages.$set('fileList', data);
         });
         return console.log("update channel filelist done");
       },
-      updateChannelMassages: function(channelName) {
+      updateChannelMessages: function(channelName) {
         var path;
         console.log("update channel messages");
         console.log("fileList.length : " + this.fileList.length);
@@ -114,7 +114,7 @@
                   image_48: 'assets/icon/dummy.png'
                 };
               } else {
-                channelMassages.userData.filter(function(item, index) {
+                channelMessages.userData.filter(function(item, index) {
                   if (item.id === message.user) {
                     return message.icons = {
                       image_48: item.profile.image_48
@@ -127,7 +127,7 @@
               if (message.user === void 0) {
                 message.username = 'unknown';
               } else {
-                channelMassages.userData.filter(function(item, index) {
+                channelMessages.userData.filter(function(item, index) {
                   if (item.id === message.user && item.name !== void 0) {
                     return message.username = item.name;
                   }
@@ -149,28 +149,28 @@
           results = [];
           for (k = 0, len2 = messages.length; k < len2; k++) {
             value = messages[k];
-            results.push(channelMassages.massages.push(value));
+            results.push(channelMessages.messages.push(value));
           }
           return results;
         });
         return console.log("update channel messages done");
       },
       onChangeChannel: function() {
-        this.$set('massages', []);
-        this.$set('massages_updated', []);
+        this.$set('messages', []);
+        this.$set('messages_update', []);
         this.updateUserData();
         this.updateFileList(channelInfo.name);
         return this.tryUpdateMessages();
       },
       tryUpdateMessages: function() {
         console.log('checkNeedLoad: ' + this.checkNeedLoad());
-        while (this.massages.length < 15 && this.fileListNum < this.fileList.length) {
+        while (this.messages.length < 15 && this.fileListNum < this.fileList.length) {
           this.updateMessages();
         }
-        return this.$set('massages_updated', this.massages);
+        return this.$set('messages_update', this.messages);
       },
       updateMessages: function() {
-        this.updateChannelMassages(channelInfo.name);
+        this.updateChannelMessages(channelInfo.name);
         this.fileListNum++;
         console.log("fileListNum: " + this.fileListNum);
         return console.log('checkNeedLoad: ' + this.checkNeedLoad());
@@ -184,24 +184,24 @@
       }
     },
     watch: {
-      'massages_updated': function() {
-        return console.log('massages updated');
+      'messages_update': function() {
+        return console.log('messages updated');
       },
       'loadMessage': function() {
         console.log('loadMessage: ' + this.loadMessage);
         if (this.loadMessage === true && this.fileListNum < this.fileList.length) {
           this.updateMessages();
-          return this.$set('massages_updated', this.massages);
+          return this.$set('messages_update', this.messages);
         }
       }
     },
     created: function() {
-      return console.log("channelMassages created");
+      return console.log("channelMessages created");
     }
   });
 
   document.onscroll = function() {
-    return channelMassages.loadMessage = channelMassages.checkNeedLoad();
+    return channelMessages.loadMessage = channelMessages.checkNeedLoad();
   };
 
 }).call(this);

@@ -30,13 +30,13 @@ channelInfo = new Vue
     name: ''
   watch:
     'name' : () ->
-      channelMassages.onChangeChannel()
+      channelMessages.onChangeChannel()
 
-channelMassages = new Vue
-  el: '#channelMassages'
+channelMessages = new Vue
+  el: '#channelMessages'
   data:
-    massages: []
-    massages_updated: []
+    messages: []
+    messages_update: []
     fileList: []
     fileListNum: 0
     userData: []
@@ -54,7 +54,7 @@ channelMassages = new Vue
         async: false
       .done (data) ->
         # update
-        channelMassages.$set('userData', data)
+        channelMessages.$set('userData', data)
       console.log("update user data done")
     updateFileList: (channelName) ->
       path = dataPath + channelName + "/" + "filelist.json"
@@ -65,9 +65,9 @@ channelMassages = new Vue
         async: false
       .done (data) ->
         # update
-        channelMassages.$set('fileList', data)
+        channelMessages.$set('fileList', data)
       console.log("update channel filelist done")
-    updateChannelMassages: (channelName) ->
+    updateChannelMessages: (channelName) ->
       console.log("update channel messages")
       console.log("fileList.length : " + @fileList.length)
       path = dataPath + channelName + "/" + @fileList[@fileListNum]
@@ -86,7 +86,7 @@ channelMassages = new Vue
               message.icons = { image_48: 'assets/icon/dummy.png' }
             else
               # exist user -> update user icom
-              channelMassages.userData.filter (item, index) ->
+              channelMessages.userData.filter (item, index) ->
                 if item.id == message.user
                   message.icons = { image_48: item.profile.image_48 }
           # !! fix username
@@ -98,7 +98,7 @@ channelMassages = new Vue
               message.username = 'unknown' 
             else
               # exist user -> update user.name
-              channelMassages.userData.filter (item, index) ->
+              channelMessages.userData.filter (item, index) ->
                 if item.id == message.user && item.name != undefined
                     message.username = item.name
           # !! fix timestamp
@@ -113,21 +113,21 @@ channelMassages = new Vue
           messages.push(message)
         # update
         for value in messages
-          channelMassages.massages.push(value)
+          channelMessages.messages.push(value)
       console.log("update channel messages done")
     onChangeChannel: () ->
-      @$set('massages', [])
-      @$set('massages_updated', [])
+      @$set('messages', [])
+      @$set('messages_update', [])
       @updateUserData()
       @updateFileList(channelInfo.name)
       @tryUpdateMessages()
     tryUpdateMessages: () ->
       console.log('checkNeedLoad: ' + @checkNeedLoad())
-      while @massages.length < 15 && @fileListNum < @fileList.length
+      while @messages.length < 15 && @fileListNum < @fileList.length
         @updateMessages()
-      @$set('massages_updated', @massages)
+      @$set('messages_update', @messages)
     updateMessages: () ->
-      @updateChannelMassages(channelInfo.name)
+      @updateChannelMessages(channelInfo.name)
       @fileListNum++
       console.log("fileListNum: " + @fileListNum)
       console.log('checkNeedLoad: ' + @checkNeedLoad())
@@ -137,15 +137,15 @@ channelMassages = new Vue
       y_height   = document.documentElement.scrollHeight || document.body.scrollHeight
       return (y_position + y_offset + 80) >= y_height
   watch:
-    'massages_updated' : () ->
-      console.log('massages updated')
+    'messages_update' : () ->
+      console.log('messages updated')
     'loadMessage' : () ->
       console.log('loadMessage: ' + @loadMessage)
       if @loadMessage == true && @fileListNum < @fileList.length
         @updateMessages()
-        @$set('massages_updated', @massages)
+        @$set('messages_update', @messages)
   created: () ->
-    console.log("channelMassages created")
+    console.log("channelMessages created")
 
 document.onscroll = () ->
-  channelMassages.loadMessage = channelMassages.checkNeedLoad()
+  channelMessages.loadMessage = channelMessages.checkNeedLoad()
