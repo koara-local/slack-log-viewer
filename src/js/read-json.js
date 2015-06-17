@@ -97,14 +97,14 @@
         var path;
         console.log("update channel messages");
         console.log("fileList.length : " + this.fileList.length);
-        path = dataPath + channelName + "/" + this.fileList[this.fileListNum];
+        path = dataPath + channelName + "/" + this.fileList[this.fileList.length - this.fileListNum];
         console.log("load json data : " + path);
         $.ajax({
           type: "GET",
           url: path,
           async: false
         }).done(function(data) {
-          var att, i, j, k, len, len1, len2, message, messages, ref, results, unixEpoch, value;
+          var att, i, j, k, len, len1, message, messages, ref, results, unixEpoch, value;
           messages = [];
           for (i = 0, len = data.length; i < len; i++) {
             message = data[i];
@@ -147,9 +147,9 @@
             messages.push(message);
           }
           results = [];
-          for (k = 0, len2 = messages.length; k < len2; k++) {
+          for (k = messages.length - 1; k >= 0; k += -1) {
             value = messages[k];
-            results.push(channelMessages.messages.push(value));
+            results.push(channelMessages.messages.unshift(value));
           }
           return results;
         });
@@ -160,7 +160,8 @@
         this.$set('messages_update', []);
         this.updateUserData();
         this.updateFileList(channelInfo.name);
-        return this.tryUpdateMessages();
+        this.tryUpdateMessages();
+        return document.documentElement.scrollTop = document.documentElement.scrollHeight;
       },
       tryUpdateMessages: function() {
         console.log('checkNeedLoad: ' + this.checkNeedLoad());
@@ -176,11 +177,7 @@
         return console.log('checkNeedLoad: ' + this.checkNeedLoad());
       },
       checkNeedLoad: function() {
-        var y_height, y_offset, y_position;
-        y_position = document.documentElement.scrollTop || document.body.scrollTop;
-        y_offset = document.documentElement.offsetHeight || document.body.offsetHeight;
-        y_height = document.documentElement.scrollHeight || document.body.scrollHeight;
-        return (y_position + y_offset + 80) >= y_height;
+        return document.documentElement.scrollTop === 0;
       }
     },
     watch: {
@@ -188,10 +185,13 @@
         return console.log('messages updated');
       },
       'loadMessage': function() {
+        var sh;
         console.log('loadMessage: ' + this.loadMessage);
         if (this.loadMessage === true && this.fileListNum < this.fileList.length) {
+          sh = document.documentElement.scrollHeight;
           this.updateMessages();
-          return this.$set('messages_update', this.messages);
+          this.$set('messages_update', this.messages);
+          return document.documentElement.scrollTop = document.documentElement.scrollHeight - sh;
         }
       }
     },

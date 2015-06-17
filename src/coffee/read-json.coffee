@@ -70,7 +70,7 @@ channelMessages = new Vue
     updateChannelMessages: (channelName) ->
       console.log("update channel messages")
       console.log("fileList.length : " + @fileList.length)
-      path = dataPath + channelName + "/" + @fileList[@fileListNum]
+      path = dataPath + channelName + "/" + @fileList[@fileList.length - @fileListNum]
       console.log("load json data : " + path)
       $.ajax
         type: "GET"
@@ -112,8 +112,8 @@ channelMessages = new Vue
               att.textFixed = marked(att.text)
           messages.push(message)
         # update
-        for value in messages
-          channelMessages.messages.push(value)
+        for value in messages by -1
+          channelMessages.messages.unshift(value)
       console.log("update channel messages done")
     onChangeChannel: () ->
       @$set('messages', [])
@@ -121,6 +121,7 @@ channelMessages = new Vue
       @updateUserData()
       @updateFileList(channelInfo.name)
       @tryUpdateMessages()
+      document.documentElement.scrollTop = document.documentElement.scrollHeight
     tryUpdateMessages: () ->
       console.log('checkNeedLoad: ' + @checkNeedLoad())
       while @messages.length < 15 && @fileListNum < @fileList.length
@@ -132,18 +133,17 @@ channelMessages = new Vue
       console.log("fileListNum: " + @fileListNum)
       console.log('checkNeedLoad: ' + @checkNeedLoad())
     checkNeedLoad: () ->
-      y_position = document.documentElement.scrollTop || document.body.scrollTop
-      y_offset   = document.documentElement.offsetHeight || document.body.offsetHeight
-      y_height   = document.documentElement.scrollHeight || document.body.scrollHeight
-      return (y_position + y_offset + 80) >= y_height
+      return document.documentElement.scrollTop == 0
   watch:
     'messages_update' : () ->
       console.log('messages updated')
     'loadMessage' : () ->
       console.log('loadMessage: ' + @loadMessage)
       if @loadMessage == true && @fileListNum < @fileList.length
+        sh = document.documentElement.scrollHeight
         @updateMessages()
         @$set('messages_update', @messages)
+        document.documentElement.scrollTop = document.documentElement.scrollHeight - sh
   created: () ->
     console.log("channelMessages created")
 
