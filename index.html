@@ -8,20 +8,18 @@
   </head>
   <body>
     <nav class="navbar navbar-inverse navbar-fixed-top">
-      <div class="container-fluid">
-        <div class="navbar-header"></div>
-        <button type="button" data-toggle="collapse" data-target="#navbar" aria-expanded="false" aria-controls="navbar" class="navbar-toggle collapsed"><span class="sr-only">Toggle navigation</span><span class="icon-bar"></span><span class="icon-bar"></span><span class="icon-bar"></span></button><a href="#" class="navbar-brand">Slack Log Viewer v0.1</a>
-        <div id="navbar" class="navbar-collapse collapse">
-          <ul class="nav navbar-nav navbar-right">
-            <li><a href="#">Dashboard</a></li>
-            <li><a href="#">Settings</a></li>
-            <li><a href="#">Profile</a></li>
-            <li><a href="#">Help</a></li>
-          </ul>
-          <form class="navbar-form navbar-right">
-            <input type="text" placeholder="Search..." class="form-control">
-          </form>
-        </div>
+      <div class="navbar-header"></div>
+      <button type="button" data-toggle="collapse" data-target="#navbar" aria-expanded="false" aria-controls="navbar" class="navbar-toggle collapsed"><span class="sr-only">Toggle navigation</span><span class="icon-bar"></span><span class="icon-bar"></span><span class="icon-bar"></span></button><a href="#" class="navbar-brand">Slack Log Viewer v0.1</a>
+      <div id="navbar" class="navbar-collapse collapse">
+        <ul class="nav navbar-nav navbar-right">
+          <li><a href="#">Dashboard</a></li>
+          <li><a href="#">Settings</a></li>
+          <li><a href="#">Profile</a></li>
+          <li><a href="#">Help</a></li>
+        </ul>
+        <form class="navbar-form navbar-right">
+          <input type="text" placeholder="Search..." class="form-control">
+        </form>
       </div>
     </nav>
     <div class="container-fluid">
@@ -32,20 +30,24 @@
           <div id="channelListFotter"></div>
         </ul>
       </div>
-      <div id="channelMassages">
-        <h1 class="page-header">#{{ channel.name }}</h1>
-        <div v-repeat="massages_updated" class="media">
-          <div class="media-left"><a href="#"></a><img v-attr="src: icons.image_48" alt="48x48" class="media-object"></div>
-          <div class="media-body">
-            <h4 class="media-heading">{{ username }}<small id="messageIsBot" v-if="bot_id">BOT</small><small id="messageTimestamp">{{ fixedTimestamp }}</small></h4>
-            <div>
-              <p v-html="textFixed"></p>
-            </div>
-            <blockquote id="messageBlockQuote" v-if="attachments">
-              <div v-repeat="attachments">
-                <p v-html="attachments[$index].textFixed"></p>
+      <div id="channelMain">
+        <div id="channelInfo">
+          <h3 id="page-header">#{{ name }}</h3>
+        </div>
+        <div id="channelMassages">
+          <div v-repeat="massages_updated" class="media">
+            <div class="media-left"><a href="#"></a><img v-attr="src: icons.image_48" alt="48x48" class="media-object"></div>
+            <div class="media-body">
+              <h4 class="media-heading">{{ username }}<small id="messageIsBot" v-if="bot_id">BOT</small><small id="messageTimestamp">{{ fixedTimestamp }}</small></h4>
+              <div>
+                <p v-html="textFixed"></p>
               </div>
-            </blockquote>
+              <blockquote id="messageBlockQuote" v-if="attachments">
+                <div v-repeat="attachments">
+                  <p v-html="attachments[$index].textFixed"></p>
+                </div>
+              </blockquote>
+            </div>
           </div>
         </div>
       </div>

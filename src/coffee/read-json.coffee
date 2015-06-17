@@ -12,11 +12,9 @@ channelList = new Vue
     channels: []
   methods:
     onClick: (e) ->
-      channelMassages.channel.name = e.target.innerHTML.slice(1)
-      console.log("channel switched : " + channelMassages.channel.name)
+      channelInfo.name = e.target.innerHTML.slice(1)
     onLoad: () ->
-      channelMassages.channel.name = @channels[0].name
-      console.log("channel onLoad : " + channelMassages.channel.name)
+      channelInfo.name = @channels[0].name
     updateChannelList: () ->
       $.getJSON dataPath + "channels.json", (data) ->
         for value in data
@@ -26,11 +24,17 @@ channelList = new Vue
     console.log("channelList created")
     @updateChannelList()
 
+channelInfo = new Vue
+  el: '#channelInfo'
+  data:
+    name: ''
+  watch:
+    'name' : () ->
+      channelMassages.onChangeChannel()
+
 channelMassages = new Vue
   el: '#channelMassages'
   data:
-    channel:
-      name: ''
     massages: []
     massages_updated: []
     fileList: []
@@ -115,7 +119,7 @@ channelMassages = new Vue
       @$set('massages', [])
       @$set('massages_updated', [])
       @updateUserData()
-      @updateFileList(@channel.name)
+      @updateFileList(channelInfo.name)
       @tryUpdateMessages()
     tryUpdateMessages: () ->
       console.log('checkNeedLoad: ' + @checkNeedLoad())
@@ -123,7 +127,7 @@ channelMassages = new Vue
         @updateMessages()
       @$set('massages_updated', @massages)
     updateMessages: () ->
-      @updateChannelMassages(@channel.name)
+      @updateChannelMassages(channelInfo.name)
       @fileListNum++
       console.log("fileListNum: " + @fileListNum)
       console.log('checkNeedLoad: ' + @checkNeedLoad())
@@ -133,8 +137,6 @@ channelMassages = new Vue
       y_height   = document.documentElement.scrollHeight || document.body.scrollHeight
       return (y_position + y_offset + 80) >= y_height
   watch:
-    'channel.name' : () ->
-      @onChangeChannel()
     'massages_updated' : () ->
       console.log('massages updated')
     'loadMessage' : () ->

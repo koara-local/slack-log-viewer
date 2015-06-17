@@ -1,5 +1,5 @@
 (function() {
-  var channelList, channelMassages, channelName, dataPath;
+  var channelInfo, channelList, channelMassages, channelName, dataPath;
 
   $(".sidebar").mCustomScrollbar({
     mouseWheel: {
@@ -19,12 +19,10 @@
     },
     methods: {
       onClick: function(e) {
-        channelMassages.channel.name = e.target.innerHTML.slice(1);
-        return console.log("channel switched : " + channelMassages.channel.name);
+        return channelInfo.name = e.target.innerHTML.slice(1);
       },
       onLoad: function() {
-        channelMassages.channel.name = this.channels[0].name;
-        return console.log("channel onLoad : " + channelMassages.channel.name);
+        return channelInfo.name = this.channels[0].name;
       },
       updateChannelList: function() {
         return $.getJSON(dataPath + "channels.json", function(data) {
@@ -43,12 +41,21 @@
     }
   });
 
+  channelInfo = new Vue({
+    el: '#channelInfo',
+    data: {
+      name: ''
+    },
+    watch: {
+      'name': function() {
+        return channelMassages.onChangeChannel();
+      }
+    }
+  });
+
   channelMassages = new Vue({
     el: '#channelMassages',
     data: {
-      channel: {
-        name: ''
-      },
       massages: [],
       massages_updated: [],
       fileList: [],
@@ -152,7 +159,7 @@
         this.$set('massages', []);
         this.$set('massages_updated', []);
         this.updateUserData();
-        this.updateFileList(this.channel.name);
+        this.updateFileList(channelInfo.name);
         return this.tryUpdateMessages();
       },
       tryUpdateMessages: function() {
@@ -163,7 +170,7 @@
         return this.$set('massages_updated', this.massages);
       },
       updateMessages: function() {
-        this.updateChannelMassages(this.channel.name);
+        this.updateChannelMassages(channelInfo.name);
         this.fileListNum++;
         console.log("fileListNum: " + this.fileListNum);
         return console.log('checkNeedLoad: ' + this.checkNeedLoad());
@@ -177,9 +184,6 @@
       }
     },
     watch: {
-      'channel.name': function() {
-        return this.onChangeChannel();
-      },
       'massages_updated': function() {
         return console.log('massages updated');
       },

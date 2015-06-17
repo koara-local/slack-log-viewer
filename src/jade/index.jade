@@ -8,31 +8,30 @@ html
 
     body
         nav.navbar.navbar-inverse.navbar-fixed-top
-            div.container-fluid
-                div.navbar-header
-                button.navbar-toggle.collapsed(
-                        type="button"
-                        data-toggle="collapse"
-                        data-target="#navbar"
-                        aria-expanded="false"
-                        aria-controls="navbar")
-                    span.sr-only Toggle navigation
-                    span.icon-bar
-                    span.icon-bar
-                    span.icon-bar
-                a(href="#").navbar-brand Slack Log Viewer v0.1
-                div#navbar.navbar-collapse.collapse
-                    ul.nav.navbar-nav.navbar-right
-                        li
-                            a(href="#") Dashboard
-                        li
-                            a(href="#") Settings
-                        li
-                            a(href="#") Profile
-                        li
-                            a(href="#") Help
-                    form.navbar-form.navbar-right
-                        input(type="text" class="form-control" placeholder="Search...")
+            div.navbar-header
+            button.navbar-toggle.collapsed(
+                    type="button"
+                    data-toggle="collapse"
+                    data-target="#navbar"
+                    aria-expanded="false"
+                    aria-controls="navbar")
+                span.sr-only Toggle navigation
+                span.icon-bar
+                span.icon-bar
+                span.icon-bar
+            a(href="#").navbar-brand Slack Log Viewer v0.1
+            div#navbar.navbar-collapse.collapse
+                ul.nav.navbar-nav.navbar-right
+                    li
+                        a(href="#") Dashboard
+                    li
+                        a(href="#") Settings
+                    li
+                        a(href="#") Profile
+                    li
+                        a(href="#") Help
+                form.navbar-form.navbar-right
+                    input(type="text" class="form-control" placeholder="Search...")
 
         div.container-fluid
             div#channelList.sidebar.mCustomScrollbar(data-mcs-theme="light-thick")
@@ -41,23 +40,24 @@ html
                     li#channelListBox(v-repeat="channels")
                         a(v-on="click: onClick") \#{{* name }}
                     div#channelListFotter
-
-            div#channelMassages
-                h1.page-header \#{{ channel.name }}
-                div.media(v-repeat="massages_updated")
-                    div.media-left
-                        a(href="#")
-                        img.media-object(v-attr="src: icons.image_48" alt="48x48")
-                    div.media-body
-                        h4.media-heading
-                            {{ username }}
-                            small#messageIsBot(v-if="bot_id") BOT
-                            small#messageTimestamp {{ fixedTimestamp }}
-                        div
-                            p(v-html="textFixed")
-                        blockquote#messageBlockQuote(v-if="attachments")
-                            div(v-repeat="attachments")
-                                p(v-html="attachments[$index].textFixed")
+            div#channelMain
+                div#channelInfo
+                    h3#page-header \#{{ name }}
+                div#channelMassages
+                    div.media(v-repeat="massages_updated")
+                        div.media-left
+                            a(href="#")
+                            img.media-object(v-attr="src: icons.image_48" alt="48x48")
+                        div.media-body
+                            h4.media-heading
+                                {{ username }}
+                                small#messageIsBot(v-if="bot_id") BOT
+                                small#messageTimestamp {{ fixedTimestamp }}
+                            div
+                                p(v-html="textFixed")
+                            blockquote#messageBlockQuote(v-if="attachments")
+                                div(v-repeat="attachments")
+                                    p(v-html="attachments[$index].textFixed")
 
     link(rel='stylesheet', href='assets/css/viewer.css')
     script(src='assets/js/read-json.js')

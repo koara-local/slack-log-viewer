@@ -57,12 +57,36 @@ div#channelListFotter {
     -moz-border-radius: 5px;
 }
 
+.container-fluid {
+    margin-top: 50px;
+    height: 100%;
+    padding: 0;
+}
+
+div#channelMain {
+    position: absolute;
+    padding-left: 220px;
+    height: 100%;
+    width: 100%;
+}
+
+div#channelInfo {
+    position: fixed;
+    padding-left: 20px;
+    width: 100%;
+    height: auto;
+    background-color: #FFF;
+}
+
+div#channelInfo > h3 {
+    margin-top: 15px;
+    margin-bottom: 15px;
+}
+
 div#channelMassages {
     width: 900px;
-    position: absolute;
-    left: 220px;
     padding-left: 30px;
-    padding-top: 50px;
+    padding-top: 70px;
 }
 
 small#messageIsBot {
