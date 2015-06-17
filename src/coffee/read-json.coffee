@@ -34,7 +34,9 @@ channelMassages = new Vue
     massages: []
     massages_updated: []
     fileList: []
+    fileListNum: 0
     userData: []
+    loadMessage: false
   methods:
     updateUserData: () ->
       if @userData.length > 0
@@ -64,68 +66,85 @@ channelMassages = new Vue
     updateChannelMassages: (channelName) ->
       console.log("update channel messages")
       console.log("fileList.length : " + @fileList.length)
-      @$set('massages_updated', [])
-      @massages = []
-      deferreds = []
-      for filename in @fileList
-        path = dataPath + channelName + "/" + filename
-        console.log("load json data : " + path)
-        readfile =
-          $.ajax
-            type: "GET"
-            url: path
-            async: true
-          .done (data) ->
-            messages = []
-            for message in data
-              # !! fix icon
-              if message.icons == undefined
-                if message.user == undefined
-                  # if no icon image & no user -> add dummy icon
-                  message.icons = { image_48: 'assets/icon/dummy.png' }
-                else
-                  # exist user -> update user icom
-                  channelMassages.userData.filter (item, index) ->
-                    if item.id == message.user
-                      message.icons = { image_48: item.profile.image_48 }
-              # !! fix username
-              if message.username == undefined
-                # check & update name
-                if message.user == undefined
-                  # if no user
-                  # FIXME
-                  message.username = 'unknown' 
-                else
-                  # exist user -> update user.name
-                  channelMassages.userData.filter (item, index) ->
-                    if item.id == message.user && item.name != undefined
-                        message.username = item.name
-              # !! fix timestamp
-              unixEpoch = String(message.ts).split(".")[0]
-              message.fixedTimestamp =
-                moment.unix(unixEpoch).format('YYYY/MM/DD hh:mm')
-              # !! fix text
-              message.textFixed = marked(message.text)
-              if message.attachments != undefined
-                for att in message.attachments
-                  att.textFixed = marked(att.text)
-              messages.push(message)
-            # update
-            for value in messages
-              channelMassages.massages.push(value)
-        deferreds.push(readfile)
-      $.when.apply($, deferreds).done () ->
-        channelMassages.$set('massages_updated', channelMassages.massages)
+      path = dataPath + channelName + "/" + @fileList[@fileListNum]
+      console.log("load json data : " + path)
+      $.ajax
+        type: "GET"
+        url: path
+        async: false
+      .done (data) ->
+        messages = []
+        for message in data
+          # !! fix icon
+          if message.icons == undefined
+            if message.user == undefined
+              # if no icon image & no user -> add dummy icon
+              message.icons = { image_48: 'assets/icon/dummy.png' }
+            else
+              # exist user -> update user icom
+              channelMassages.userData.filter (item, index) ->
+                if item.id == message.user
+                  message.icons = { image_48: item.profile.image_48 }
+          # !! fix username
+          if message.username == undefined
+            # check & update name
+            if message.user == undefined
+              # if no user
+              # FIXME
+              message.username = 'unknown' 
+            else
+              # exist user -> update user.name
+              channelMassages.userData.filter (item, index) ->
+                if item.id == message.user && item.name != undefined
+                    message.username = item.name
+          # !! fix timestamp
+          unixEpoch = String(message.ts).split(".")[0]
+          message.fixedTimestamp =
+            moment.unix(unixEpoch).format('YYYY/MM/DD hh:mm')
+          # !! fix text
+          message.textFixed = marked(message.text)
+          if message.attachments != undefined
+            for att in message.attachments
+              att.textFixed = marked(att.text)
+          messages.push(message)
+        # update
+        for value in messages
+          channelMassages.massages.push(value)
+      @$set('massages_updated', @massages)
       console.log("update channel messages done")
     onChangeChannel: () ->
-      channelName = @channel.name
+      @$set('massages', [])
+      @$set('massages_updated', [])
       @updateUserData()
-      @updateFileList(channelName)
-      @updateChannelMassages(channelName)
+      @updateFileList(@channel.name)
+      @updateMessages()
+      @tryUpdateMessages()
+    updateMessages: () ->
+      if @fileListNum <= @fileList.length
+        @updateChannelMassages(@channel.name)
+        @fileListNum++
+        console.log("fileListNum: " + @fileListNum)
+    tryUpdateMessages: () ->
+      while @checkNeedLoad() == true && @fileListNum <= @fileList.length
+        @updateChannelMassages(@channel.name)
+        @fileListNum++
+        console.log("fileListNum: " + @fileListNum)
+    checkNeedLoad: () ->
+      y_position = document.documentElement.scrollTop || document.body.scrollTop
+      y_offset   = document.documentElement.offsetHeight || document.body.offsetHeight
+      y_height   = document.documentElement.scrollHeight || document.body.scrollHeight
+      return (y_position + y_offset) >= y_height
   watch:
     'channel.name' : () ->
       @onChangeChannel()
     'massages' : () ->
       console.log('massages updated')
+    'loadMessage' : () ->
+      console.log('loadMessage: ' + @loadMessage)
+      if @loadMessage == true
+        @tryUpdateMessages()
   created: () ->
     console.log("channelMassages created")
+
+document.onscroll = () ->
+  channelMassages.loadMessage = channelMassages.checkNeedLoad()

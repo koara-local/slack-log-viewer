@@ -52,7 +52,9 @@
       massages: [],
       massages_updated: [],
       fileList: [],
-      userData: []
+      fileListNum: 0,
+      userData: [],
+      loadMessage: false
     },
     methods: {
       updateUserData: function() {
@@ -85,83 +87,99 @@
         return console.log("update channel filelist done");
       },
       updateChannelMassages: function(channelName) {
-        var deferreds, filename, i, len, path, readfile, ref;
+        var path;
         console.log("update channel messages");
         console.log("fileList.length : " + this.fileList.length);
-        this.$set('massages_updated', []);
-        this.massages = [];
-        deferreds = [];
-        ref = this.fileList;
-        for (i = 0, len = ref.length; i < len; i++) {
-          filename = ref[i];
-          path = dataPath + channelName + "/" + filename;
-          console.log("load json data : " + path);
-          readfile = $.ajax({
-            type: "GET",
-            url: path,
-            async: true
-          }).done(function(data) {
-            var att, j, k, l, len1, len2, len3, message, messages, ref1, results, unixEpoch, value;
-            messages = [];
-            for (j = 0, len1 = data.length; j < len1; j++) {
-              message = data[j];
-              if (message.icons === void 0) {
-                if (message.user === void 0) {
-                  message.icons = {
-                    image_48: 'assets/icon/dummy.png'
-                  };
-                } else {
-                  channelMassages.userData.filter(function(item, index) {
-                    if (item.id === message.user) {
-                      return message.icons = {
-                        image_48: item.profile.image_48
-                      };
-                    }
-                  });
-                }
+        path = dataPath + channelName + "/" + this.fileList[this.fileListNum];
+        console.log("load json data : " + path);
+        $.ajax({
+          type: "GET",
+          url: path,
+          async: false
+        }).done(function(data) {
+          var att, i, j, k, len, len1, len2, message, messages, ref, results, unixEpoch, value;
+          messages = [];
+          for (i = 0, len = data.length; i < len; i++) {
+            message = data[i];
+            if (message.icons === void 0) {
+              if (message.user === void 0) {
+                message.icons = {
+                  image_48: 'assets/icon/dummy.png'
+                };
+              } else {
+                channelMassages.userData.filter(function(item, index) {
+                  if (item.id === message.user) {
+                    return message.icons = {
+                      image_48: item.profile.image_48
+                    };
+                  }
+                });
               }
-              if (message.username === void 0) {
-                if (message.user === void 0) {
-                  message.username = 'unknown';
-                } else {
-                  channelMassages.userData.filter(function(item, index) {
-                    if (item.id === message.user && item.name !== void 0) {
-                      return message.username = item.name;
-                    }
-                  });
-                }
-              }
-              unixEpoch = String(message.ts).split(".")[0];
-              message.fixedTimestamp = moment.unix(unixEpoch).format('YYYY/MM/DD hh:mm');
-              message.textFixed = marked(message.text);
-              if (message.attachments !== void 0) {
-                ref1 = message.attachments;
-                for (k = 0, len2 = ref1.length; k < len2; k++) {
-                  att = ref1[k];
-                  att.textFixed = marked(att.text);
-                }
-              }
-              messages.push(message);
             }
-            results = [];
-            for (l = 0, len3 = messages.length; l < len3; l++) {
-              value = messages[l];
-              results.push(channelMassages.massages.push(value));
+            if (message.username === void 0) {
+              if (message.user === void 0) {
+                message.username = 'unknown';
+              } else {
+                channelMassages.userData.filter(function(item, index) {
+                  if (item.id === message.user && item.name !== void 0) {
+                    return message.username = item.name;
+                  }
+                });
+              }
             }
-            return results;
-          });
-          deferreds.push(readfile);
-        }
-        $.when.apply($, deferreds).done(function() {
-          return channelMassages.$set('massages_updated', channelMassages.massages);
+            unixEpoch = String(message.ts).split(".")[0];
+            message.fixedTimestamp = moment.unix(unixEpoch).format('YYYY/MM/DD hh:mm');
+            message.textFixed = marked(message.text);
+            if (message.attachments !== void 0) {
+              ref = message.attachments;
+              for (j = 0, len1 = ref.length; j < len1; j++) {
+                att = ref[j];
+                att.textFixed = marked(att.text);
+              }
+            }
+            messages.push(message);
+          }
+          results = [];
+          for (k = 0, len2 = messages.length; k < len2; k++) {
+            value = messages[k];
+            results.push(channelMassages.massages.push(value));
+          }
+          return results;
         });
+        this.$set('massages_updated', this.massages);
         return console.log("update channel messages done");
       },
       onChangeChannel: function() {
-        channelName = this.channel.name;
+        this.$set('massages', []);
+        this.$set('massages_updated', []);
         this.updateUserData();
-        this.updateFileList(channelName);
-        return this.updateChannelMassages(channelName);
+        this.updateFileList(this.channel.name);
+        this.updateMessages();
+        return this.tryUpdateMessages();
+      },
+      updateMessages: function() {
+        if (this.fileListNum <= this.fileList.length) {
+          this.updateChannelMassages(this.channel.name);
+          this.fileListNum++;
+          return console.log("fileListNum: " + this.fileListNum);
+        }
+      },
+      tryUpdateMessages: function() {
+        var results;
+        results = [];
+        while (this.checkNeedLoad() === true && this.fileListNum <= this.fileList.length) {
+          this.updateChannelMassages(this.channel.name);
+          this.fileListNum++;
+          results.push(console.log("fileListNum: " + this.fileListNum));
+        }
+        return results;
+      },
+      checkNeedLoad: function() {
+        var y_height, y_offset, y_position;
+        y_position = document.documentElement.scrollTop || document.body.scrollTop;
+        y_offset = document.documentElement.offsetHeight || document.body.offsetHeight;
+        y_height = document.documentElement.scrollHeight || document.body.scrollHeight;
+        return (y_position + y_offset) >= y_height;
       }
     },
     watch: {
@@ -170,11 +188,21 @@
       },
       'massages': function() {
         return console.log('massages updated');
+      },
+      'loadMessage': function() {
+        console.log('loadMessage: ' + this.loadMessage);
+        if (this.loadMessage === true) {
+          return this.tryUpdateMessages();
+        }
       }
     },
     created: function() {
       return console.log("channelMassages created");
     }
   });
+
+  document.onscroll = function() {
+    return channelMassages.loadMessage = channelMassages.checkNeedLoad();
+  };
 
 }).call(this);
