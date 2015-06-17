@@ -110,39 +110,38 @@ channelMassages = new Vue
         # update
         for value in messages
           channelMassages.massages.push(value)
-      @$set('massages_updated', @massages)
       console.log("update channel messages done")
     onChangeChannel: () ->
       @$set('massages', [])
       @$set('massages_updated', [])
       @updateUserData()
       @updateFileList(@channel.name)
-      @updateMessages()
       @tryUpdateMessages()
-    updateMessages: () ->
-      if @fileListNum <= @fileList.length
-        @updateChannelMassages(@channel.name)
-        @fileListNum++
-        console.log("fileListNum: " + @fileListNum)
     tryUpdateMessages: () ->
-      while @checkNeedLoad() == true && @fileListNum <= @fileList.length
-        @updateChannelMassages(@channel.name)
-        @fileListNum++
-        console.log("fileListNum: " + @fileListNum)
+      console.log('checkNeedLoad: ' + @checkNeedLoad())
+      while @massages.length < 15 && @fileListNum < @fileList.length
+        @updateMessages()
+      @$set('massages_updated', @massages)
+    updateMessages: () ->
+      @updateChannelMassages(@channel.name)
+      @fileListNum++
+      console.log("fileListNum: " + @fileListNum)
+      console.log('checkNeedLoad: ' + @checkNeedLoad())
     checkNeedLoad: () ->
       y_position = document.documentElement.scrollTop || document.body.scrollTop
       y_offset   = document.documentElement.offsetHeight || document.body.offsetHeight
       y_height   = document.documentElement.scrollHeight || document.body.scrollHeight
-      return (y_position + y_offset) >= y_height
+      return (y_position + y_offset + 80) >= y_height
   watch:
     'channel.name' : () ->
       @onChangeChannel()
-    'massages' : () ->
+    'massages_updated' : () ->
       console.log('massages updated')
     'loadMessage' : () ->
       console.log('loadMessage: ' + @loadMessage)
-      if @loadMessage == true
-        @tryUpdateMessages()
+      if @loadMessage == true && @fileListNum < @fileList.length
+        @updateMessages()
+        @$set('massages_updated', @massages)
   created: () ->
     console.log("channelMassages created")
 

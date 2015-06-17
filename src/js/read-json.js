@@ -146,7 +146,6 @@
           }
           return results;
         });
-        this.$set('massages_updated', this.massages);
         return console.log("update channel messages done");
       },
       onChangeChannel: function() {
@@ -154,45 +153,41 @@
         this.$set('massages_updated', []);
         this.updateUserData();
         this.updateFileList(this.channel.name);
-        this.updateMessages();
         return this.tryUpdateMessages();
       },
-      updateMessages: function() {
-        if (this.fileListNum <= this.fileList.length) {
-          this.updateChannelMassages(this.channel.name);
-          this.fileListNum++;
-          return console.log("fileListNum: " + this.fileListNum);
-        }
-      },
       tryUpdateMessages: function() {
-        var results;
-        results = [];
-        while (this.checkNeedLoad() === true && this.fileListNum <= this.fileList.length) {
-          this.updateChannelMassages(this.channel.name);
-          this.fileListNum++;
-          results.push(console.log("fileListNum: " + this.fileListNum));
+        console.log('checkNeedLoad: ' + this.checkNeedLoad());
+        while (this.massages.length < 15 && this.fileListNum < this.fileList.length) {
+          this.updateMessages();
         }
-        return results;
+        return this.$set('massages_updated', this.massages);
+      },
+      updateMessages: function() {
+        this.updateChannelMassages(this.channel.name);
+        this.fileListNum++;
+        console.log("fileListNum: " + this.fileListNum);
+        return console.log('checkNeedLoad: ' + this.checkNeedLoad());
       },
       checkNeedLoad: function() {
         var y_height, y_offset, y_position;
         y_position = document.documentElement.scrollTop || document.body.scrollTop;
         y_offset = document.documentElement.offsetHeight || document.body.offsetHeight;
         y_height = document.documentElement.scrollHeight || document.body.scrollHeight;
-        return (y_position + y_offset) >= y_height;
+        return (y_position + y_offset + 80) >= y_height;
       }
     },
     watch: {
       'channel.name': function() {
         return this.onChangeChannel();
       },
-      'massages': function() {
+      'massages_updated': function() {
         return console.log('massages updated');
       },
       'loadMessage': function() {
         console.log('loadMessage: ' + this.loadMessage);
-        if (this.loadMessage === true) {
-          return this.tryUpdateMessages();
+        if (this.loadMessage === true && this.fileListNum < this.fileList.length) {
+          this.updateMessages();
+          return this.$set('massages_updated', this.massages);
         }
       }
     },
