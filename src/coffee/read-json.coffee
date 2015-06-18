@@ -106,10 +106,16 @@ channelMessages = new Vue
           message.fixedTimestamp =
             moment.unix(unixEpoch).format('YYYY/MM/DD hh:mm')
           # !! fix text
-          message.textFixed = marked(message.text)
+          try
+            message.textFixed = marked(message.text)
+          catch error
+            message.textFixed = "markdown parse error : " + error
           if message.attachments != undefined
             for att in message.attachments
-              att.textFixed = marked(att.text)
+              try
+                att.textFixed = marked(att.text)
+              catch error
+                att.textFixed = "markdown parse error : " + error
           messages.push(message)
         # update
         for value in messages by -1

@@ -104,7 +104,7 @@
           url: path,
           async: false
         }).done(function(data) {
-          var att, i, j, k, len, len1, message, messages, ref, results, unixEpoch, value;
+          var att, error, i, j, k, len, len1, message, messages, ref, results, unixEpoch, value;
           messages = [];
           for (i = 0, len = data.length; i < len; i++) {
             message = data[i];
@@ -136,12 +136,22 @@
             }
             unixEpoch = String(message.ts).split(".")[0];
             message.fixedTimestamp = moment.unix(unixEpoch).format('YYYY/MM/DD hh:mm');
-            message.textFixed = marked(message.text);
+            try {
+              message.textFixed = marked(message.text);
+            } catch (_error) {
+              error = _error;
+              message.textFixed = "markdown parse error : " + error;
+            }
             if (message.attachments !== void 0) {
               ref = message.attachments;
               for (j = 0, len1 = ref.length; j < len1; j++) {
                 att = ref[j];
-                att.textFixed = marked(att.text);
+                try {
+                  att.textFixed = marked(att.text);
+                } catch (_error) {
+                  error = _error;
+                  att.textFixed = "markdown parse error : " + error;
+                }
               }
             }
             messages.push(message);
