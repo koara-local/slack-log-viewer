@@ -2,11 +2,13 @@ fs         = require 'fs'
 express    = require 'express'
 bodyParser = require 'body-parser'
 mongodb    = require 'mongodb'
+basicAuth  = require 'basic-auth-connect'
 
 app = express()
 
 app.use(express.static('.'))
 app.use(bodyParser.json())
+app.use(basicAuth('guest', 'guest'))
 app.listen(8000)
 
 data_users    = fs.readFileSync('data/users.json', 'utf-8')
