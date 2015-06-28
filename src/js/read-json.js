@@ -25,13 +25,9 @@
         return channelInfo.name = this.channels[0].name;
       },
       updateChannelList: function() {
-        return $.getJSON(dataPath + "channels.json", function(data) {
-          var i, len, value;
-          for (i = 0, len = data.length; i < len; i++) {
-            value = data[i];
-            channelList.channels.push(value);
-          }
-          return channelList.onLoad();
+        return this.$http.get('/api/channels', function(data, status, request) {
+          this.channels = data;
+          return this.onLoad();
         });
       }
     },

@@ -20,9 +20,9 @@ gulp.task 'server:restart', () ->
 # concat depends library
 files_concat =
   js  : [
-    'bower_components/bootstrap/dist/js/bootstrap.min.js'
     'bower_components/jquery/dist/jquery.min.js'
     'bower_components/jquery-mousewheel/jquery.mousewheel.min.js'
+    'bower_components/bootstrap/dist/js/bootstrap.min.js'
     'bower_components/malihu-custom-scrollbar-plugin/jquery.mCustomScrollbar.concat.min.js'
     'bower_components/moment/min/moment-with-locales.min.js'
     'bower_components/marked/marked.min.js'
