@@ -1,17 +1,21 @@
-gulp       = require('gulp')
-browser    = require('browser-sync')
+gulp        = require 'gulp'
+browser     = require 'browser-sync'
+loadPlugins = require 'gulp-load-plugins'
 
-plugins    = require('gulp-load-plugins')()
+plugins = loadPlugins()
 
-# browser-sync server
-gulp.task 'server', () ->
-  browser({server:{baseDir:"."}})
+# server
+gulp.task 'server:start', () ->
+  plugins.developServer.listen {path: './server.js'}, (error) ->
+    browser({proxy: 'http://localhost:8000'}) if !error
 
-gulp.task 'node', () ->
+gulp.task 'server:restart', () ->
   gulp.src('server.coffee')
     .pipe(plugins.plumber({errorHandler: plugins.notify.onError('<%= error.message %>')}))
     .pipe(plugins.coffee())
     .pipe(gulp.dest('.'))
+    .pipe(plugins.developServer())
+    .pipe(browser.reload({stream:true}))
 
 # concat depends library
 files_concat =
@@ -77,11 +81,11 @@ gulp.task 'css', () ->
     .pipe(browser.reload({stream:true}))
 
 # run & watch
-gulp.task 'default', () ->
+gulp.task 'default', ['server:start'], () ->
+  gulp.watch(['server.coffee'], ['server:restart'])
   gulp.watch(files_concat.js, ['concat_js'])
   gulp.watch(files_concat.css, ['concat_css'])
   gulp.watch(["src/coffee/*.coffee"], ["compile-coffee"])
   gulp.watch(["src/jade/*.jade"], ["compile-jade"])
   gulp.watch(["src/js/*.js"], ["js"])
   gulp.watch(["src/css/*.css"], ["css"])
-  gulp.watch(["server.coffee"], ["node"])
