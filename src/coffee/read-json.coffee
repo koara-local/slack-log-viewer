@@ -16,10 +16,9 @@ channelList = new Vue
     onLoad: () ->
       channelInfo.name = @channels[0].name
     updateChannelList: () ->
-      $.getJSON dataPath + "channels.json", (data) ->
-        for value in data
-          channelList.channels.push(value)
-        channelList.onLoad()
+      this.$http.get '/api/channels', (data, status, request) ->
+        this.channels = data
+        this.onLoad()
   created: () ->
     console.log("channelList created")
     @updateChannelList()
